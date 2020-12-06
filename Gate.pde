@@ -24,6 +24,14 @@ class Gate extends UIObj {
     addChildren(outputs);
   }
   
+  int numInputs() {
+    return inputs.size();
+  }
+  
+  int numOutputs() {
+    return outputs.size();
+  }
+  
   String toString() {
     return label + " GATE";
   }

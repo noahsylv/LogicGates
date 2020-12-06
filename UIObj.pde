@@ -5,7 +5,7 @@ abstract class UIObj {
   int w, h;
   // moving
   int mxOffset, myOffset;
-  boolean canMove, selected;
+  boolean canMove, selected, isDragged;
   ArrayList<UIObj> children;
   UIObj parent;
 
@@ -16,21 +16,22 @@ abstract class UIObj {
     this.h = h;
     this.canMove = canMove;
     this.selected = selected;
+    this.isDragged = false;
     this.children = new ArrayList();
   }
-  
+
   void addToChildren(UIObj obj) {
     children.add(obj);
     obj.parent = this;
   }
-  
+
   void addChildren(Iterable objects) {
     for (Object obj : objects) {
       UIObj uiObj = (UIObj) obj;
       addToChildren(uiObj);
     }
   }
-  
+
   int cx() {
     return x + w/2;
   }
@@ -40,29 +41,42 @@ abstract class UIObj {
 
   // must be implemented
   abstract void show();
-  
-  void tick() {}
 
-  void handleAll() {
-    this.show();
-    this.tick();
+  void tick() {
+  }
+
+  void handleAll(boolean show, boolean tick) {
+    if (show) this.show();
+    if (tick) this.tick();
     for (UIObj child : children) {
-      child.show();
-      child.tick();
+      if (show) child.show();
+      if (tick) child.tick();
+    }
+    if (isDragged && canMove) {
+      drag(mouseX, mouseY);
     }
   }
-  
+
+  void place() {
+  }
+
   void drawBoundingBox() {
     stroke(0, 200, 0);
     noFill();
     rect(x, y, w, h);
   }
+
   // -- secondary affects of top level interaction
-  void subClick(int mx, int my) {}
-  void subClick() {}
-  void subDrag(int mx, int my) {}
-  void subDrag() {}
-  void subRelease() {}
+  void subClick(int mx, int my) {
+  }
+  void subClick() {
+  }
+  void subDrag(int mx, int my) {
+  }
+  void subDrag() {
+  }
+  void subRelease() {
+  }
 
   void click(int mx, int my) {
     // apply to children
@@ -95,6 +109,7 @@ abstract class UIObj {
       child.drag(mx, my);
     }
     if (canMove && selected) {
+      println("here");
       int oldX = this.x;
       int oldY = this.y;
       this.x = mxOffset + mx;
@@ -109,11 +124,13 @@ abstract class UIObj {
   }
 
   void release() {
-      // apply to children
-      for (UIObj child : children) {
-        child.release();
-      }
+    // apply to children
+    for (UIObj child : children) {
+      child.release();
+    }
+    if (!isDragged) {
       selected = false;
       subRelease();
     }
   }
+}

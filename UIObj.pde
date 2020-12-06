@@ -102,6 +102,10 @@ abstract class UIObj {
       }
     }
   }
+  
+  void keyPressed(char key) {
+    
+  }
 
   void drag(int mx, int my) {
     // apply to children
@@ -109,7 +113,6 @@ abstract class UIObj {
       child.drag(mx, my);
     }
     if (canMove && selected) {
-      println("here");
       int oldX = this.x;
       int oldY = this.y;
       this.x = mxOffset + mx;

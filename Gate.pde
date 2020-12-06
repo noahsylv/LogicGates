@@ -74,7 +74,7 @@ class Gate extends UIObj {
     int[] outputBits = evaluate(inputBits);
     i = 0;
     for (Bit bit : outputs) {
-      bit.isOn = outputBits[i] == 1;
+      bit.setOn(outputBits[i] == 1);
       i++;
     }
   }

@@ -11,6 +11,36 @@ class Bit extends UIObj {
     this.isOutType = isOutType;
     outWires = new ArrayList<Wire>();
   }
+
+  boolean isInput() {
+    return isOutType && canControl;
+  }
+
+  boolean isOutput() {
+    return !isOutType && 
+      (this.parent == null || !(this.parent instanceof Gate));
+  }
+  
+
+  void setOn(boolean on) {
+    if (isOn != on) {
+      bitFlip = true;
+      isOn = on;
+    }
+  }
+
+  void turnOff() {
+    setOn(false);
+  }
+
+  void turnOn() {
+    setOn(true);
+  }
+  
+  void flip() {
+    setOn(!isOn);
+  }
+  
   void show() {
     if (this == selectedBit) drawBoundingBox();
     stroke(255);
@@ -18,7 +48,7 @@ class Bit extends UIObj {
     ellipse(cx(), cy(), w, h);
   }
   void subClick() {
-    if (canControl) isOn = !isOn;
+    if (canControl) flip();
     if (selectedBit == null) {
       selectedBit = this;
     }

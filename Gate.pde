@@ -12,15 +12,20 @@ class Gate extends UIObj {
     // create plugs
     for (int i = 0; i < numInputs; i++) {
       int bitY = getY(i, numInputs);
-      println(bitY);
-      inputs.add(new Bit(x + bitOffset, bitY, 50, false));
+      Bit b = new Bit(x + bitOffset, bitY, 50, false, false);
+      inputs.add(b);
     }
     for (int i = 0; i < numOutputs; i++) {
       int bitY = getY(i, numOutputs);
-      outputs.add(new Bit(x + (w - bitOffset), bitY, 50, false));
+      Bit b = new Bit(x + (w - bitOffset), bitY, 50, false, true);
+      outputs.add(b);
     }
-    children.addAll(inputs);
-    children.addAll(outputs);
+    addChildren(inputs);
+    addChildren(outputs);
+  }
+  
+  String toString() {
+    return label + " GATE";
   }
 
   int getY(int i, int n) {

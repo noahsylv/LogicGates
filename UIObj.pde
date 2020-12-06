@@ -7,6 +7,7 @@ abstract class UIObj {
   int mxOffset, myOffset;
   boolean canMove, selected;
   ArrayList<UIObj> children;
+  UIObj parent;
 
   UIObj(int x, int y, int w, int h, boolean canMove, boolean selected) {
     this.x = x;
@@ -16,6 +17,18 @@ abstract class UIObj {
     this.canMove = canMove;
     this.selected = selected;
     this.children = new ArrayList();
+  }
+  
+  void addToChildren(UIObj obj) {
+    children.add(obj);
+    obj.parent = this;
+  }
+  
+  void addChildren(Iterable objects) {
+    for (Object obj : objects) {
+      UIObj uiObj = (UIObj) obj;
+      addToChildren(uiObj);
+    }
   }
   
   int cx() {
